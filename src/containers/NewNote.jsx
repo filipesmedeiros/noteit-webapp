@@ -3,7 +3,7 @@ import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 import LoaderButton from '../components/LoaderButton';
 import config from '../config';
 import { API } from 'aws-amplify';
-import { s3Upload} from "../libs/awsLib";
+import { s3Upload } from "../libs/awsLib";
 import './NewNote.css';
 
 export default class NewNote extends Component {

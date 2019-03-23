@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { API, Storage } from 'aws-amplify';
-import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import LoaderButton from "../components/LoaderButton";
-import { s3Remove, s3Upload } from "../libs/awsLib";
-import config from "../config";
-import "./Note.css";
+import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import LoaderButton from '../components/LoaderButton';
+import { s3Remove, s3Upload } from '../libs/awsLib';
+import config from '../config';
+import './Note.css';
 
 // Needed for attachment keys on s3 (name of folder inside root bucket)
 const PRIVATE = 'private/';
@@ -58,7 +58,7 @@ export default class Notes extends Component {
     }
 
     static formatFilename(str) {
-        return str.replace(/^\w+-/, "");
+        return str.replace(/^\w+-/, '');
     }
 
     handleChange = event => {
@@ -72,7 +72,7 @@ export default class Notes extends Component {
     };
 
     saveNote(note) {
-        return API.put("notes", `/notes/${this.props.match.params.id}`, {
+        return API.put('notes', `/notes/${this.props.match.params.id}`, {
             body: note
         });
     }
@@ -103,7 +103,7 @@ export default class Notes extends Component {
                 content: this.state.content,
                 attachment: attachment || this.state.note.attachment
             });
-            this.props.history.push("/");
+            this.props.history.push('/');
         } catch (e) {
             alert(e);
             this.setState({ isLoading: false });
@@ -114,14 +114,15 @@ export default class Notes extends Component {
         return API.del('notes', `/notes/${this.props.match.params.id}`, {});
     };
 
-    //TODO make a cooler confirmation prompt
+    // TODO find a way to delete attachment when note is deleted or attachment changed
+    // TODO make a cooler confirmation prompt
     handleDelete = async event => {
         event.preventDefault();
 
         this.setState({ isDeleting: true});
 
         const confirmed = window.confirm(
-            "Are you sure you want to delete this note?"
+            'Are you sure you want to delete this note?'
         );
 
         if(!confirmed) {
@@ -131,13 +132,11 @@ export default class Notes extends Component {
 
         try {
             await this.deleteNote();
-            this.props.history.push("/");
+            this.props.history.push('/');
 
-            if(this.oldAttachmentURL) {
-                console.log(this.oldAttachmentURL);
+            if(this.oldAttachmentURL)
                 await s3Remove(this.oldAttachmentURL);
-            }
-        } catch (e) {
+        } catch(e) {
             alert(e);
             this.setState({ isLoading: false });
         }
@@ -145,14 +144,14 @@ export default class Notes extends Component {
 
     render() {
         return (
-            <div className="Note">
+            <div className='Note'>
                 {this.state.note &&
                 <form onSubmit={this.handleSubmit}>
-                    <FormGroup controlId="content">
+                    <FormGroup controlId='content'>
                         <FormControl
                             onChange={this.handleChange}
                             value={this.state.content}
-                            componentClass="textarea"
+                            componentClass='textarea'
                         />
                     </FormGroup>
                     {this.state.note.attachment &&
@@ -160,37 +159,37 @@ export default class Notes extends Component {
                         <ControlLabel>Attachment</ControlLabel>
                         <FormControl.Static>
                             <a
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                target='_blank'
+                                rel='noopener noreferrer'
                                 href={this.state.attachmentURL}
                             >
                                 {Notes.formatFilename(this.state.note.attachment)}
                             </a>
                         </FormControl.Static>
                     </FormGroup>}
-                    <FormGroup controlId="file">
+                    <FormGroup controlId='file'>
                         {!this.state.note.attachment &&
                         <ControlLabel>Attachment</ControlLabel>}
-                        <FormControl onChange={this.handleFileChange} type="file" />
+                        <FormControl onChange={this.handleFileChange} type='file' />
                     </FormGroup>
                     <LoaderButton
                         block
-                        bsStyle="primary"
-                        bsSize="large"
+                        bsStyle='primary'
+                        bsSize='large'
                         disabled={!this.validateForm()}
-                        type="submit"
+                        type='submit'
                         isLoading={this.state.isLoading}
-                        text="Save"
-                        loadingText="Saving…"
+                        text='Save'
+                        loadingText='Saving…'
                     />
                     <LoaderButton
                         block
-                        bsStyle="danger"
-                        bsSize="large"
+                        bsStyle='danger'
+                        bsSize='large'
                         isLoading={this.state.isDeleting}
                         onClick={this.handleDelete}
-                        text="Delete"
-                        loadingText="Deleting…"
+                        text='Delete'
+                        loadingText='Deleting…'
                     />
                 </form>}
             </div>
