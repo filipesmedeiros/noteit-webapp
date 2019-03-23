@@ -1,4 +1,8 @@
 export default {
+    // For note attachments, we define a max size
+    MAX_ATTACHMENT_SIZE: 5000000,
+
+    // AWS Amplify configuration (used in index.js)
     s3: {
         REGION: 'eu-west-3',
         BUCKET: 'noteit-note-attachments'
