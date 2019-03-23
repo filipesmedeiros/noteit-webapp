@@ -40,9 +40,9 @@ export default class Home extends Component {
 
         /**
          * Needed because WebStorm warns about properties that it doesn't recognize
-         * @param note
-         * @param note.noteId
-         * @param note.createdAt
+         * @var note
+         * @property note.noteId
+         * @property note.createdAt
          */
         return [{}].concat(notes).map(
             (note, i) =>

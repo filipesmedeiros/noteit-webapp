@@ -28,7 +28,6 @@ export default class NewNote extends Component {
         });
     };
 
-    // TODO handle use case: filename is '__NA' (not allowed)
     handleFileChange = event => {
         this.file = event.target.files[0];
     };
@@ -46,7 +45,7 @@ export default class NewNote extends Component {
         try {
             const attachment = this.file
                 ? await s3Upload(this.file)
-                : '__NA';
+                : null;
 
             await NewNote.createNote({
                 attachment,
