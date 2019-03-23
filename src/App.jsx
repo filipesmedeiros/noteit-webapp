@@ -6,7 +6,24 @@ import Routes from './Routes';
 import {LinkContainer} from 'react-router-bootstrap';
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isAuthenticated: false
+        };
+    }
+
+    userHasAuthenticated = authenticated => {
+        this.setState({ isAuthenticated: authenticated });
+    };
+
     render() {
+        const childProps = {
+            isAuthenticated: this.state.isAuthenticated,
+            userHasAuthenticated: this.userHasAuthenticated
+        };
+
         return (
             <div className='App container'>
                 <Navbar fluid collapseOnSelect>
@@ -14,11 +31,11 @@ class App extends Component {
                         <Navbar.Brand>
                             <Link to='/'>Scratch</Link>
                         </Navbar.Brand>
-                        <Navbar.Toggle />
+                        <Navbar.Toggle/>
                     </Navbar.Header>
                     <Navbar.Collapse>
                         <Nav pullRight>
-                            <LinkContainer to='login'>
+                            <LinkContainer to='/login'>
                                 <NavItem>Log In</NavItem>
                             </LinkContainer>
                             <LinkContainer to='/signup'>
@@ -27,7 +44,7 @@ class App extends Component {
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
-                <Routes />
+                <Routes childProps={childProps}/>
             </div>
         );
     }
