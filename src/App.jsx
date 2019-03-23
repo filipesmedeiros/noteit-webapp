@@ -52,13 +52,18 @@ class App extends Component {
                 <Navbar fluid collapseOnSelect>
                     <Navbar.Header>
                         <Navbar.Brand>
-                            <Link to='/'>Scratch</Link>
+                            <Link to='/'>NoteIt</Link>
                         </Navbar.Brand>
                         <Navbar.Toggle/>
                     </Navbar.Header>
                     <Navbar.Collapse>
                         <Nav pullRight>{this.state.isAuthenticated
-                            ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                            ? <>
+                                <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                                <LinkContainer to='/notes/new'>
+                                    <NavItem>New Note</NavItem>
+                                </LinkContainer>
+                            </>
                             : <>
                                 <LinkContainer to='/signup'>
                                     <NavItem>Signup</NavItem>
