@@ -1,7 +1,13 @@
 {
-  "name": "noteit-webapp",
+  "name": "simply-noteit-webapp",
   "version": "0.1.0",
   "private": true,
+  "author": "Simply - Design & IT",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/filipesmedeiros/noteit-webapp.git"
+  },
   "dependencies": {
     "aws-amplify": "^1.1.22",
     "prop-types": "^15.7.2",
@@ -16,6 +22,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "predeploy": "npm run build",
+    "deploy": "aws s3 sync build/ s3://noteit-webapp --delete",
+    "postdeploy": "aws cloudfront create-invalidation --distribution-id EUUIHEI2WDZ71 --paths /*",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

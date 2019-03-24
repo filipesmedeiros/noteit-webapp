@@ -9,6 +9,7 @@ import LoaderButton from '../components/LoaderButton';
 import { Auth } from 'aws-amplify';
 import './SignUp.css';
 
+// TODO give more feedback on why sign up button is disabled
 export default class Signup extends Component {
     constructor(props) {
         super(props);
