@@ -1,6 +1,7 @@
 import { Storage } from 'aws-amplify';
 import config from '../config';
 
+// TODO bring Auth request to here
 export async function s3Upload(file) {
     const filename = `${Date.now()}-${file.name}`;
 

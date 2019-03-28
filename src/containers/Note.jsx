@@ -6,20 +6,20 @@ import { s3Remove, s3Upload } from '../libs/awsLib';
 import config from '../config';
 import './Note.css';
 
-// Needed for attachment keys on s3 (name of folder inside root bucket)
-const PRIVATE = 'private/';
-
 export default class Notes extends Component {
     constructor(props) {
         super(props);
 
         this.file = null;
-        this.oldAttachmentURL = null;
+
+        this.oldAttachmentKey = null;
+        this.oldContent = null;
 
         this.state = {
             note: null,
             content: '',
-            attachmentURL: null
+            attachmentURL: null,
+            isDiff: 0
         };
     }
 
@@ -34,9 +34,11 @@ export default class Notes extends Component {
             const note = await this.getNote();
             const { content, attachment } = note;
 
+            this.oldContent = content;
+
             if(attachment) {
                 attachmentURL = await Storage.vault.get(attachment);
-                this.oldAttachmentURL = PRIVATE + note.userId + '/' + attachment;
+                this.oldAttachmentKey = attachment;
             }
 
             this.setState({
@@ -61,14 +63,22 @@ export default class Notes extends Component {
         return str.replace(/^\w+-/, '');
     }
 
+    // TODO Find more elegant way to code this, or at least more perceptible
     handleChange = event => {
+        let testDiff = event.target.value !== this.oldContent ? 1 : 0;
+
         this.setState({
-            [event.target.id]: event.target.value
+            [event.target.id]: event.target.value,
+            isDiff: this.state.isDiff !== 2 ? testDiff : 2
         });
+
+        console.log(this.state.isDiff);
     };
 
     handleFileChange = event => {
         this.file = event.target.files[0];
+
+        this.setState({ isDiff: 2});
     };
 
     saveNote(note) {
@@ -93,16 +103,15 @@ export default class Notes extends Component {
             if(this.file) {
                 attachment = await s3Upload(this.file);
 
-                if(this.oldAttachmentURL) {
-                    console.log(this.oldAttachmentURL);
-                    await s3Remove(this.oldAttachmentURL);
-                }
+                if(this.oldAttachmentKey)
+                    await s3Remove(this.oldAttachmentKey);
             }
 
             await this.saveNote({
                 content: this.state.content,
                 attachment: attachment || this.state.note.attachment
             });
+
             this.props.history.push('/');
         } catch (e) {
             alert(e);
@@ -132,10 +141,11 @@ export default class Notes extends Component {
 
         try {
             await this.deleteNote();
-            this.props.history.push('/');
 
-            if(this.oldAttachmentURL)
-                await s3Remove(this.oldAttachmentURL);
+            if(this.oldAttachmentKey)
+                await s3Remove(this.oldAttachmentKey);
+
+            this.props.history.push('/');
         } catch(e) {
             alert(e);
             this.setState({ isLoading: false });
@@ -176,7 +186,7 @@ export default class Notes extends Component {
                         block
                         bsStyle='primary'
                         bsSize='large'
-                        disabled={!this.validateForm()}
+                        disabled={!this.validateForm() || !this.state.isDiff}
                         type='submit'
                         isLoading={this.state.isLoading}
                         text='Save'

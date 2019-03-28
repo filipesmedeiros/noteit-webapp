@@ -1,5 +1,5 @@
 {
-  "name": "simply-noteit-webapp",
+  "name": "noteit-webapp",
   "version": "0.1.0",
   "private": true,
   "author": "Simply - Design & IT",
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "aws-amplify": "^1.1.22",
+    "aws-sdk": "^2.427.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
     "react-bootstrap": "^0.32.4",
