@@ -12,7 +12,6 @@
     "aws-amplify": "^1.1.22",
     "aws-sdk": "^2.427.0",
     "braces": "^2.3.2",
-    "jest": "^24.5.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
     "react-bootstrap": "^0.32.4",
