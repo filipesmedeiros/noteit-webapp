@@ -11,21 +11,21 @@
   "dependencies": {
     "aws-amplify": "^1.1.22",
     "aws-sdk": "^2.427.0",
+    "braces": "^2.3.2",
+    "jest": "^24.5.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.8.4",
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.8"
+    "react-scripts": "^2.1.8",
+    "react-stripe-elements": "^2.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "predeploy": "npm run build",
-    "deploy": "aws s3 sync build/ s3://noteit-webapp --delete",
-    "postdeploy": "aws cloudfront create-invalidation --distribution-id EUUIHEI2WDZ71 --paths /*",
+    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -36,5 +36,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "jest": "^24.5.0"
+  }
 }

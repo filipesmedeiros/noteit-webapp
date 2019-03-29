@@ -16,7 +16,8 @@ const dev = {
         USER_POOL_ID: 'eu-west-2_LV0AhENLg',
         APP_CLIENT_ID: '4jlc857ud7hpq9hh28a3bmnoeb',
         IDENTITY_POOL_ID: 'eu-west-2:4154f713-2c13-4ab4-9e9a-5bf24c6b5561'
-    }
+    },
+    STRIPE_KEY: 'pk_test_VP2Btjebn50kxpP9ltnGe5MS003pB5inAp'
 };
 
 // TODO change this to prod config when first prod build is deployed
@@ -35,7 +36,8 @@ const prod = {
         USER_POOL_ID: 'eu-west-2_1lnI61cPa',
         APP_CLIENT_ID: '2i00t5marr54ua87c781j1tt6b',
         IDENTITY_POOL_ID: 'eu-west-2:417f1eb9-cf1b-4d96-961d-5a5b7e10ac28'
-    }
+    },
+    STRIPE_KEY: 'pk_test_VP2Btjebn50kxpP9ltnGe5MS003pB5inAp'
 };
 
 const config = process.env.REACT_APP_STAGE === 'prod'
