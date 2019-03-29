@@ -72,7 +72,7 @@ export default class Home extends Component {
         return (
             <div className='lander'>
                 <h1>NoteIt</h1>
-                <p>A simple note taking app</p>
+                <p>A simple note taking app, by Simply</p>
             </div>
         );
     }
