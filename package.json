@@ -37,6 +37,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "jest": "^24.5.0"
+    "jest": "^23.6.0"
   }
 }
