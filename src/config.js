@@ -5,17 +5,17 @@ const dev = {
     // AWS Amplify configuration (used in index.js)
     s3: {
         REGION: 'eu-west-2',
-        BUCKET: 'noteit-api-dev-attachmentsbucket-t69bbehxrf92'
+        BUCKET: 'noteit-s3-dev-s3bucket-113ly0fvvd8g2'
     },
     apiGateway: {
         REGION: 'eu-west-2',
-        URL: 'https://durla25rqd.execute-api.eu-west-2.amazonaws.com/dev'
+        URL: 'https://zkr5up7rq9.execute-api.eu-west-2.amazonaws.com/dev'
     },
     cognito: {
         REGION: 'eu-west-2',
-        USER_POOL_ID: 'eu-west-2_LV0AhENLg',
-        APP_CLIENT_ID: '4jlc857ud7hpq9hh28a3bmnoeb',
-        IDENTITY_POOL_ID: 'eu-west-2:4154f713-2c13-4ab4-9e9a-5bf24c6b5561'
+        USER_POOL_ID: 'eu-west-2_HpGyDWIX9',
+        APP_CLIENT_ID: '1ds24v7glk3jtn6oodinus16qv',
+        IDENTITY_POOL_ID: 'eu-west-2:66c7fe5b-eb66-4c09-92c5-45f155d487fe'
     },
     STRIPE_KEY: 'pk_test_VP2Btjebn50kxpP9ltnGe5MS003pB5inAp'
 };
@@ -25,19 +25,19 @@ const prod = {
     // AWS Amplify configuration (used in index.js)
     s3: {
         REGION: 'eu-west-2',
-        BUCKET: 'noteit-note-attachments'
+        BUCKET: ''
     },
     apiGateway: {
         REGION: 'eu-west-2',
-        URL: 'https://durla25rqd.execute-api.eu-west-2.amazonaws.com/dev'
+        URL: ''
     },
     cognito: {
         REGION: 'eu-west-2',
-        USER_POOL_ID: 'eu-west-2_1lnI61cPa',
-        APP_CLIENT_ID: '2i00t5marr54ua87c781j1tt6b',
-        IDENTITY_POOL_ID: 'eu-west-2:417f1eb9-cf1b-4d96-961d-5a5b7e10ac28'
+        USER_POOL_ID: 'eu-west-2',
+        APP_CLIENT_ID: '',
+        IDENTITY_POOL_ID: 'eu-west-2:'
     },
-    STRIPE_KEY: 'pk_test_VP2Btjebn50kxpP9ltnGe5MS003pB5inAp'
+    STRIPE_KEY: 'pk_prod_'
 };
 
 const config = process.env.REACT_APP_STAGE === 'prod'
