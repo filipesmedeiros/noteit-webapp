@@ -1,0 +1,51 @@
+@import '../index'
+
+.triangle
+  background-color: $dark-color
+  border: $primary-color 1.7rem solid
+  position: absolute
+  z-index: -50
+
+@keyframes pulse-1
+  0%
+    transform: rotate(-45deg) scale(1)
+  50%
+    transform: rotate(-44.5deg) scale(1.03)
+  100%
+    transform: rotate(-45deg) scale(1)
+
+@keyframes pulse-2
+  0%
+    transform: rotate(15deg) scale(1) translate(-50%, -50%)
+  50%
+    transform: rotate(14.5deg) scale(1.03) translate(-50%, -50%)
+  100%
+    transform: rotate(15deg) scale(1) translate(-50%, -50%)
+
+@keyframes pulse-3
+  0%
+    transform: rotate(-75deg) scale(1)
+  50%
+    transform: rotate(-74deg) scale(1.15)
+  100%
+    transform: rotate(-75deg) scale(1)
+
+#triangle-top-left
+  left: calc(0px - 25rem)
+  top: calc(0px - 40rem)
+  height: 50rem
+  width: 50rem
+  animation: pulse-1 5s infinite ease
+
+#triangle-bottom-right
+  left: 100vw
+  top: 100vh
+  height: 100rem
+  width: 50rem
+  animation: pulse-2 5s infinite ease
+
+#triangle-bottom-left
+  top: -5rem
+  height: 200rem
+  width: 20rem
+  animation: pulse-3 5s infinite ease

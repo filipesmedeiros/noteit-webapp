@@ -1,0 +1,31 @@
+@import '../index'
+@import '../containers/Home'
+
+div.note-thumbnail
+  width: 100%
+  list-style: none
+  background: $light-color
+  float: left
+  height: 7.5rem
+  padding: 0 2rem
+  border: 1px solid #DDD
+  border-bottom: none
+
+div.note-thumbnail:hover
+  background: $dark-color
+  cursor: pointer
+  color: $primary-color
+
+.note-thumbnail div
+  height: 100%
+
+.note-thumbnail div p
+  margin-bottom: 0
+
+.note-thumbnail h4
+  margin-top: 0
+  margin-bottom: 3px
+  font-weight: 600
+
+a:last-child .note-thumbnail
+  border-bottom: 1px solid #DDD
