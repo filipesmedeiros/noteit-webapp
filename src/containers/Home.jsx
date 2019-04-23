@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { PageHeader, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { API } from 'aws-amplify';
 import { LinkContainer } from "react-router-bootstrap";
-import './Home.css';
+import NoteThumbnail from "../components/NoteThumbnail";
+import './Home.sass';
+import Link from "react-router-dom/es/Link";
 
 //TODO store note list locally so we don't call the API everytime we need it
 export default class Home extends Component {
@@ -30,12 +32,10 @@ export default class Home extends Component {
         this.setState({ isLoading: false });
     }
 
-     static notes() {
+    static notes() {
         return API.get('notes', '/notes', {});
     }
 
-    //TODO create separate class for note row?
-    //TODO create small indicator for wether note has attachment (with name?)
     static renderNotesList(notes) {
 
         /**
@@ -46,25 +46,25 @@ export default class Home extends Component {
          */
         return [{}].concat(notes).map(
             (note, i) =>
-                i !== 0
+                i === 0
                     ? <LinkContainer
-                        key={note.noteId}
-                        to={`/notes/${note.noteId}`}
+                        key='new'
+                        to='/notes/new'
                     >
-                        <ListGroupItem header={note.content.trim().split("\n")[0]}>
-                            {"Created: " + new Date(note.createdAt).toLocaleString()}
-                        </ListGroupItem>
-                    </LinkContainer>
-                    : <LinkContainer
-                        key="new"
-                        to="/notes/new"
-                    >
-                        <ListGroupItem>
+                        <ListGroupItem className='create-note-row'>
                             <h4>
-                                <b>{"\uFF0B"}</b> Create a new note
+                                <b>{'\uFF0B'}</b> Create a new note
                             </h4>
                         </ListGroupItem>
                     </LinkContainer>
+                    :
+                    <Link
+                        key={note.noteId}
+                        to={`/notes/${note.noteId}`}>
+                        <NoteThumbnail title={note.content.trim().split("\n")[0]}
+                                       date={new Date(note.createdAt).toLocaleString()}
+                                       attachment={note.attachment}/>
+                    </Link>
         );
     }
 
@@ -72,7 +72,8 @@ export default class Home extends Component {
         return (
             <div className='lander'>
                 <h1>NoteIt</h1>
-                <p>A simple note taking app, by Simply</p>
+                <p>NoteIt is a simple app, developed by Simply, where you can take notes,<br/>attach files to them, and check them whenever you want,
+                    delete them, or even edit them.</p>
             </div>
         );
     }

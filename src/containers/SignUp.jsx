@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import {
     HelpBlock,
+    Form,
     FormGroup,
     FormControl,
     ControlLabel
 } from 'react-bootstrap';
 import LoaderButton from '../components/LoaderButton';
+import ConditionalHelpBlock from '../components/ConditionalHelpBlock';
 import { Auth } from 'aws-amplify';
-import './SignUp.css';
+import './SignUp.sass';
+import '../index.sass';
 
 // TODO give more feedback on why sign up button is disabled
 export default class Signup extends Component {
@@ -25,9 +28,33 @@ export default class Signup extends Component {
     }
 
     validateForm() {
-        return /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/.test(this.state.email.toUpperCase())
-            && /(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}/.test(this.state.password) &&
-            this.state.password === this.state.confirmPassword;
+        return this.validateEmail() && this.validatePasswordDigit() &&
+            this.validatePasswordLowerCase() && this.validatePasswordUpperCase() &&
+            this.validatePasswordLength()
+            && this.state.password === this.state.confirmPassword;
+    }
+
+    validateEmail() {
+        return /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/.test(this.state.email.toUpperCase());
+    }
+
+    validatePasswordDigit() {
+        return /(?=.*\d)/.test(this.state.password) || this.state.password.length === 0;
+    }
+
+    validatePasswordLowerCase() {
+        return /(?=.*[a-z])/.test(this.state.password) || this.state.password.length === 0;
+    }
+
+    validatePasswordUpperCase() {
+        return /(?=.*[A-Z])/.test(this.state.password) || this.state.password.length === 0;
+    }
+
+    validatePasswordLength() {
+        console.log(this.state.password.length);
+        console.log(/.{8,}/.test(this.state.password));
+
+        return /.{8,}/.test(this.state.password) || this.state.password.length === 0;
     }
 
     validateConfirmationForm() {
@@ -80,7 +107,7 @@ export default class Signup extends Component {
 
     renderConfirmationForm() {
         return (
-            <form onSubmit={this.handleConfirmationSubmit}>
+            <Form onSubmit={this.handleConfirmationSubmit}>
                 <FormGroup controlId='confirmationCode' bsSize='large'>
                     <ControlLabel>Confirmation Code</ControlLabel>
                     <FormControl
@@ -100,13 +127,13 @@ export default class Signup extends Component {
                     text='Verify'
                     loadingText='Verifying…'
                 />
-            </form>
+            </Form>
         );
     }
 
     renderForm() {
         return (
-            <form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.handleSubmit}>
                 <FormGroup controlId='email' bsSize='large'>
                     <ControlLabel>Email</ControlLabel>
                     <FormControl
@@ -123,6 +150,18 @@ export default class Signup extends Component {
                         onChange={this.handleChange}
                         type='password'
                     />
+                    <ConditionalHelpBlock className='warning'
+                                          condition={!this.validatePasswordLength()}
+                                          content='Your password must be 8-16 characters long!'/>
+                    <ConditionalHelpBlock className='warning'
+                                          condition={!this.validatePasswordUpperCase()}
+                                          content='Your password must contain at least 1 uppercase letter!'/>
+                    <ConditionalHelpBlock className='warning'
+                                          condition={!this.validatePasswordLowerCase()}
+                                          content='Your password must contain at least 1 lowercase letter!!'/>
+                    <ConditionalHelpBlock className='warning'
+                                          condition={!this.validatePasswordDigit()}
+                                          content='Your password must contain at least 1 digit!'/>
                 </FormGroup>
                 <FormGroup controlId='confirmPassword' bsSize='large'>
                     <ControlLabel>Confirm Password</ControlLabel>
@@ -141,7 +180,7 @@ export default class Signup extends Component {
                     text='Signup'
                     loadingText='Signing up…'
                 />
-            </form>
+            </Form>
         );
     }
 

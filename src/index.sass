@@ -1,0 +1,63 @@
+// Global font set
+$text-font: 'Montserrat', sans-serif
+$title-font: 'Montserrat', sans-serif
+$code-font: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace
+
+// Global color scheme
+$primary-color: #FFAE00
+$dark-color: #282828
+$light-color: #FFFFFF
+$warning-color: #FF7A00
+$success-color: #1ec814
+$error-color: #c10000
+
+body
+  margin: 0
+  padding: 0
+  font-family: $text-font
+  overflow: hidden
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+
+code
+  font-family: $code-font
+
+h1, h2, h3, h4, h5, h6
+  font-family: $title-font
+
+select.form-control,
+textarea.form-control,
+input.form-control
+  font-size: 16px
+
+input[type=file]
+  width: 100%
+
+.primary
+  color: $primary-color !important
+
+.dark
+  color: $dark-color !important
+
+.warning
+  color: $warning-color !important
+
+.success
+  color: $success-color !important
+
+.light
+  color: $light-color !important
+
+.error
+  color: $error-color !important
+
+.float-left
+  float: left
+
+.float-right
+  float: right
+
+.center-content-vertically
+  display: flex
+  flex-flow: column
+  justify-content: center
