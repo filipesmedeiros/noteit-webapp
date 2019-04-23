@@ -37,7 +37,6 @@ export default class Home extends Component {
     }
 
     static renderNotesList(notes) {
-
         /**
          * Needed because WebStorm warns about properties that it doesn't recognize
          * @var note
@@ -45,26 +44,14 @@ export default class Home extends Component {
          * @property note.createdAt
          */
         return [{}].concat(notes).map(
-            (note, i) =>
-                i === 0
-                    ? <LinkContainer
-                        key='new'
-                        to='/notes/new'
-                    >
-                        <ListGroupItem className='create-note-row'>
-                            <h4>
-                                <b>{'\uFF0B'}</b> Create a new note
-                            </h4>
-                        </ListGroupItem>
-                    </LinkContainer>
-                    :
-                    <Link
-                        key={note.noteId}
-                        to={`/notes/${note.noteId}`}>
-                        <NoteThumbnail title={note.content.trim().split("\n")[0]}
-                                       date={new Date(note.createdAt).toLocaleString()}
-                                       attachment={note.attachment}/>
-                    </Link>
+            (note) =>
+                <Link
+                    key={note.noteId}
+                    to={`/notes/${note.noteId}`}>
+                    <NoteThumbnail title={note.content.trim().split("\n")[0]}
+                                   date={new Date(note.createdAt).toLocaleString()}
+                                   attachment={note.attachment}/>
+                </Link>
         );
     }
 
@@ -83,6 +70,16 @@ export default class Home extends Component {
             <div className='notes'>
                 <PageHeader>Your Notes</PageHeader>
                 <ListGroup>
+                    <LinkContainer
+                        key='new'
+                        to='/notes/new'
+                    >
+                        <ListGroupItem className='create-note-row'>
+                            <h4>
+                                <b>{'\uFF0B'}</b> Create a new note
+                            </h4>
+                        </ListGroupItem>
+                    </LinkContainer>
                     {!this.state.isLoading && Home.renderNotesList(this.state.notes)}
                 </ListGroup>
             </div>
