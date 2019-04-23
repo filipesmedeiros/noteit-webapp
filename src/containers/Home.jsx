@@ -43,8 +43,8 @@ export default class Home extends Component {
          * @property note.noteId
          * @property note.createdAt
          */
-        return [{}].concat(notes).map(
-            (note) =>
+        return [].concat(notes).map(
+            note =>
                 <Link
                     key={note.noteId}
                     to={`/notes/${note.noteId}`}>
