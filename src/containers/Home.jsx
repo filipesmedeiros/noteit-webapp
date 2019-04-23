@@ -73,7 +73,7 @@ export default class Home extends Component {
             <div className='lander'>
                 <h1>NoteIt</h1>
                 <p>NoteIt is a simple app, developed by Simply, where you can take notes,<br/>attach files to them, and check them whenever you want,
-                    delete them, or even edit them.</p>
+                    delete them, or even edit them, all through your account.</p>
             </div>
         );
     }
