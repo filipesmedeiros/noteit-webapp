@@ -12,7 +12,6 @@ import { Auth } from 'aws-amplify';
 import './SignUp.sass';
 import '../index.sass';
 
-// TODO give more feedback on why sign up button is disabled
 export default class Signup extends Component {
     constructor(props) {
         super(props);
