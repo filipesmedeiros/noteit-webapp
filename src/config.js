@@ -47,6 +47,6 @@ const config = process.env.REACT_APP_STAGE === 'prod'
 export default {
     // For note attachments, we define a max size
     MAX_ATTACHMENT_SIZE: 5000000,
-    NOTES_PAGE_SIZE: 2,
+    DEFAULT_NOTES_PAGE_SIZE: 5,
     ...config
 };

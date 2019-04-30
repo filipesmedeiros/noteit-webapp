@@ -1,11 +1,8 @@
 @import '../index'
 
-$circle-size-small: 25px
-$circle-size-medium: 2 * $circle-size-small
-$circle-size-large: 3 * $circle-size-small
-$circle-width-small: $circle-size-small / 10
-$circle-width-medium: $circle-size-medium / 10
-$circle-width-large: $circle-size-large / 10
+$circle-width-small: $size-small / 10
+$circle-width-medium: $size-medium / 10
+$circle-width-large: $size-large / 10
 
 .loading-spinner
   border-radius: 50%
@@ -39,11 +36,11 @@ $circle-width-large: $circle-size-large / 10
   border-width: $width
 
 .loading-spinner.small
-  +circle($circle-size-small, $circle-width-small)
+  +circle($size-small, $circle-width-small)
 .loading-spinner.medium
-  +circle($circle-size-medium, $circle-width-medium)
+  +circle($size-medium, $circle-width-medium)
 .loading-spinner.large
-  +circle($circle-size-large, $circle-width-large)
+  +circle($size-large, $circle-width-large)
 
 /* ============================================ */
 
