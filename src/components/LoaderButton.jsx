@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Glyphicon } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import LoadingSpinner from '../components/LoadingSpinner';
 import "./LoaderButton.css";
 
 export default ({
@@ -15,6 +16,6 @@ export default ({
         disabled={disabled || isLoading}
         {...props}
     >
-        {isLoading && <Glyphicon glyph="refresh" className="spinning" />}
+        {isLoading && <LoadingSpinner color='primary-dark' size='small'/>}
         {!isLoading ? text : loadingText}
     </Button>;

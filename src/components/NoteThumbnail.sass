@@ -1,17 +1,14 @@
 @import '../index'
 @import '../containers/Home'
 
-div.note-thumbnail
-  width: 100%
-  list-style: none
-  background: $light-color
-  float: left
+.list-group-item.note-thumbnail
   height: 7.5rem
-  padding: 0 2rem
-  border: 1px solid #DDD
-  border-bottom: none
 
-div.note-thumbnail:hover
+.note-thumbnail
+  width: 100%
+  background: $light-color
+
+.list-group .note-thumbnail:hover
   background: $dark-color
   cursor: pointer
   color: $primary-color
@@ -27,5 +24,11 @@ div.note-thumbnail:hover
   margin-bottom: 3px
   font-weight: 600
 
-a:last-child .note-thumbnail
-  border-bottom: 1px solid #DDD
+@media screen and (max-width: 500px)
+  .note-thumbnail h4
+    font-weight: 500
+    font-size: 1.7rem
+
+  .note-thumbnail p
+    font-weight: 400
+    font-size: 1rem

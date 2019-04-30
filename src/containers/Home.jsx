@@ -4,17 +4,20 @@ import { API } from 'aws-amplify';
 import { LinkContainer } from 'react-router-bootstrap';
 import NoteThumbnail from '../components/NoteThumbnail';
 import PageTracker from '../components/PageTracker';
-import Link from 'react-router-dom/es/Link';
+import LoadingSpinner from '../components/LoadingSpinner';
 import config from '../config';
 import { buildQueryString } from '../libs/utils';
 import './Home.sass';
 
-// TODO store note list locally so we don't call the API every time we need it
+// TODO store individual notes locally
+// TODO see if any code is redundant (mainly on API calls) and can be separated to helper function
 
 // TODO preload backward
 // TODO move page size out of config
 
 const LOAD_ERR_MESSAGE = 'Failed to load note page';
+const NOTES = 'notes';
+const NUMBER_OF_PAGES = 'numPages';
 
 export default class Home extends Component {
 
@@ -67,11 +70,17 @@ export default class Home extends Component {
             return;
         }
 
+        let notes = localStorage.getItem(NOTES);
+
+        if(notes) {
+            this.numberOfPages = localStorage.getItem(NUMBER_OF_PAGES);
+            this.setState({ notes: JSON.parse(notes), isLoading: false });
+            return;
+        }
+
         try {
             const response = await Home.getNotes(null);
-            this.numberOfPages = response.count % config.NOTES_PAGE_SIZE === 0 ?
-                response.count / config.NOTES_PAGE_SIZE :
-                response.count / config.NOTES_PAGE_SIZE + 1;
+            this.numberOfPages = Math.ceil(response.count / config.NOTES_PAGE_SIZE);
 
             this.setState(oldState => {
                 let currentNotes = oldState.notes.slice(0);
@@ -93,6 +102,13 @@ export default class Home extends Component {
         }
     }
 
+    componentWillUnmount() {
+        if(this.state.notes.length > 1) {
+            localStorage.setItem(NOTES, JSON.stringify(this.state.notes));
+            localStorage.setItem(NUMBER_OF_PAGES, this.numberOfPages);
+        }
+    }
+
     fetchNeighbourPages = () => {
         if(this.isFetchNeeded(this.state.currentPage  + 1))
             Home.getNotes(this.state.notes[this.state.currentPage].nextStartKey).then(
@@ -110,6 +126,34 @@ export default class Home extends Component {
             );
     };
 
+    previousPage = () => {
+        if(this.state.currentPage !== 1) {
+            if(this.isFetchNeeded(this.state.currentPage - 1))
+                this.setState(currentState => {
+                    return {
+                        isLoading: true,
+                        currentPage: currentState.currentPage - 1
+                    }
+                });
+            else
+                this.setState({ currentPage: this.state.currentPage - 1 });
+        }
+    };
+
+    nextPage = async () => {
+        if(this.state.currentPage < this.numberOfPages) {
+            if(this.isFetchNeeded(this.state.currentPage + 1))
+                this.setState(currentState => {
+                    return {
+                        isLoading: true,
+                        currentPage: currentState.currentPage + 1
+                    }
+                });
+            else
+                this.setState({ currentPage: this.state.currentPage + 1 });
+        }
+    };
+
     static async getNotes(startKey) {
         const query = buildQueryString([
             { name: 'pageSize', value: config.NOTES_PAGE_SIZE},
@@ -121,14 +165,22 @@ export default class Home extends Component {
 
     renderNotesList() {
         return [].concat(this.state.notes[this.state.currentPage].noteList).map(
-            note =>
-                <Link
-                    key={note.noteId}
-                    to={`/notes/${note.noteId}`}>
-                    <NoteThumbnail title={note.content.trim().split("\n")[0]}
-                                   date={new Date(note.createdAt).toLocaleString()}
-                                   attachment={note.attachment}/>
-                </Link>
+            note => {
+                const lnBreak = note.content.search('\n');
+
+                return (
+                    <LinkContainer
+                        key={note.noteId}
+                        to={`/notes/${note.noteId}`}>
+                        <ListGroupItem className='note-thumbnail'>
+                            <NoteThumbnail
+                                title={note.content.substr(0, lnBreak !== -1 ? lnBreak : note.content.length)}
+                                date={new Date(note.createdAt).toLocaleString()}
+                                attachment={note.attachment !== null}
+                            />
+                        </ListGroupItem>
+                    </LinkContainer>);
+            }
         );
     };
 
@@ -145,34 +197,6 @@ export default class Home extends Component {
     isFetchNeeded(pageToCheck) {
         return !this.state.notes[pageToCheck] && pageToCheck <= this.numberOfPages && pageToCheck >= 1;
     }
-
-    previousPage = () => {
-        if(this.state.currentPage !== 1) {
-            if(this.isFetchNeeded(this.state.currentPage - 1))
-                this.setState(currentState => {
-                    return {
-                        isLoading: true,
-                        currentPage: currentState.currentPage - 1
-                    }
-                });
-            else
-                this.setState({ currentPage: this.state.currentPage - 1 });
-        }
-    };
-
-    nextPage = async () => {
-        if(this.state.currentPage !== this.numberOfPages) {
-            if(this.isFetchNeeded(this.state.currentPage + 1))
-                this.setState(currentState => {
-                    return {
-                        isLoading: true,
-                        currentPage: currentState.currentPage + 1
-                    }
-                });
-            else
-                this.setState({ currentPage: this.state.currentPage + 1 });
-        }
-    };
 
     renderNotes() {
         return (
@@ -197,6 +221,7 @@ export default class Home extends Component {
                     previousPage={this.previousPage}
                     nextPage={this.nextPage}
                 />}
+                {this.state.isLoading && <LoadingSpinner color='primary-dark'/>}
             </div>
         );
     }
