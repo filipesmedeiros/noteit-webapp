@@ -70,7 +70,6 @@ button[disabled]
 
 %right-border-round
   border-bottom-right-radius: $border-radius
-  border-top-right-radius: $border-radius
 
 ::-webkit-scrollbar-track
   @extend %right-border-round
@@ -116,6 +115,9 @@ button[disabled]
   width: -moz-fit-content
   width: fit-content
 
+.h-100
+  height: 100%
+
 .flex-center
   display: flex
   justify-content: center
@@ -130,6 +132,16 @@ button[disabled]
   display: flex
   flex-flow: column
   justify-content: center
+
+.end-content-vertically
+  display: flex
+  flex-flow: column
+  justify-content: flex-end
+
+.dist-content-vertically
+  display: flex
+  flex-flow: column
+  justify-content: space-between
 
 /* ======================================= */
 

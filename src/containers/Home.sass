@@ -36,16 +36,28 @@
 .create-note-row h4
   color: $primary-color
 
-.list-group-item:first-child
+.note-list .list-group-item
+  margin-bottom: 4px
+  margin-top: 4px
+
+.list-group-item
+  border-color: $light-gray-color
+
+.list-group .list-group-item:first-child
   border-top-left-radius: 0 !important
   border-top-right-radius: 0 !important
+  margin-top: 0
 
-.list-group-item:last-child
+.list-group .list-group-item:last-child
   border-bottom-left-radius: $border-radius
-  border-bottom-right-radius: 0
+  border-bottom-right-radius: $border-radius
+  margin-bottom: 0
+
+.overflowing-ver .list-group-item
+  border-right: none
 
 .overflowing-ver .list-group-item:last-child
-  border-bottom-right-radius: $border-radius
+  border-bottom-right-radius: 0
 
 a h4, a p
   color: $dark-color

@@ -1,25 +1,27 @@
 import React, { Component } from 'react';
-import { PageHeader, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { PageHeader, ListGroupItem } from 'react-bootstrap';
 import { API } from 'aws-amplify';
 import { LinkContainer } from 'react-router-bootstrap';
 import NoteThumbnail from '../components/NoteThumbnail';
-import PageTracker from '../components/PageTracker';
+import InfiniteScroll from '../components/InfiniteScroll';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ItemPage from "../components/ItemPage";
 import config from '../config';
 import { buildQueryString } from '../libs/utils';
 import './Home.sass';
-import * as ReactDOM from "react-dom";
+import Button from "react-bootstrap/es/Button";
 
 // TODO store individual notes locally
-// TODO see if any code is redundant (mainly on API calls) and can be separated to helper function
+// TODO remake all this to be infinite feed with option of seeing all
 
-// TODO preload backward
 // TODO move page size out of config
 
 const LOAD_ERR_MESSAGE = 'Failed to load note page';
 const NOTES = 'notes';
-const NOTE_PAGE_MAP = 'notePageMap';
+const IS_INFINITE = 'isInfinite';
 const PAGE_SIZE = 'pageSize';
+
+const MAX_TITLE_LENGTH = 20;
 
 export default class Home extends Component {
 
@@ -30,12 +32,13 @@ export default class Home extends Component {
         this.noteListRef = React.createRef();
 
         this.pageSize = localStorage.getItem(PAGE_SIZE) || config.DEFAULT_NOTES_PAGE_SIZE;
-        this.totalNumberOfNotes = 0;
+        this.lastFetchHadNext = true;
 
         this.state = {
             isLoading: true,
+            isFetchingNotes: false,
             notes: localStorage.getItem(NOTES) || [],
-            notePageMap: localStorage.getItem(NOTE_PAGE_MAP) || [],
+            infiniteViewMode: localStorage.getItem(IS_INFINITE) || true,
             currentPage: 1
         };
     }
@@ -46,23 +49,26 @@ export default class Home extends Component {
         }
 
         try {
-            const { notes, count, lastKey } = await this.fetchNotes(null, this.pageSize);
+            const { notes, count, lastKey } = await this.fetchNotes(null, config.INITIAL_NOTE_FETCH_SIZE);
 
             this.totalNumberOfNotes = count;
 
             let newNotes = [].concat(notes.map((note, index) =>
-                index === this.pageSize - 1 ?
-                    { note: note, nextKey: lastKey } :
+                index === config.INITIAL_NOTE_FETCH_SIZE - 1 ?
+                    { note: note, nextKey: lastKey || null } :
                     { note: note, nextKey: null }
             ));
 
             let newNotePageMap = [];
-            for(let page = 1; page <= Math.ceil(count / this.pageSize); page++)
+            for(let page = 1; page <= Math.ceil(count / this.pageSize); page++) {
                 newNotePageMap[page - 1] = {
                     page: page,
                     first: (page - 1) * this.pageSize,
-                    last: Math.min(((page - 1) * this.pageSize) + this.pageSize - 1, count - 1)
+                    last: Math.min(((page - 1) * this.pageSize) + (this.pageSize - 1), count - 1)
                 };
+            }
+
+            this.lastFetchHadNext = !!lastKey;
 
             this.setState({
                 notes: newNotes,
@@ -77,101 +83,33 @@ export default class Home extends Component {
     shouldComponentUpdate(nextProps, nextState, nextContext) {
         return this.state.currentPage !== nextState.currentPage ||
             this.state.isLoading !== nextState.isLoading ||
-            this.state.notePageMap.length !== nextState.notePageMap.length ||
-            this.state.notes.length !== nextState.notes.length;
+            this.state.isFetchingNotes !== nextState.isFetchingNotes ||
+            this.state.notes !== nextState.notes ||
+            this.state.infiniteViewMode !== nextState.infiniteViewMode;
     }
 
     // TODO
-    async componentDidUpdate() {
-        if(this.isFetchNeeded(this.state.currentPage)) {
-            const lastNote = this.state.notePageMap[this.state.currentPage - 1].last;
-
-            console.log(this.state.notes);
-            console.log(lastNote);
-            const nextStartKey = this.state.notes[lastNote].nextKey;
-
-
-        } else
-            this.setState({ isLoading: false });
-
-        const nodeList = ReactDOM.findDOMNode(this.noteListRef.current);
-        if(nodeList.clientHeight < nodeList.scrollHeight)
-            nodeList.classList.add('overflowing-ver');
-
-        this.fetchNeighbourPages();
+    async componentDidUpdate(prevProps, prevState) {
     }
 
+    // TODO
     componentWillUnmount() {
-        localStorage.setItem(PAGE_SIZE, this.pageSize);
     }
 
-    isFetchNeeded = (pageToCheck) => {
-        if(!this.state.notePageMap[pageToCheck - 1])
-            return false;
-
-        const pageInfo = this.state.notePageMap[pageToCheck - 1];
-        for(let i = pageInfo.first; i <= pageInfo.last; i++)
-            if(!this.state.notes[i])
-                return true;
-
-        return false;
-    };
-
-    // TODO fetch previous page
+    // TODO
     fetchNeighbourPages = async () => {
-        if(this.isFetchNeeded(this.state.currentPage  + 1)) {
-            const pageInfo = this.state.notePageMap[this.state.currentPage - 1];
-            const lastNote = this.state.notes[pageInfo.last];
-            const { notes, lastKey } = await this.fetchNotes(lastNote.nextKey, this.pageSize);
-
-            this.setState(oldState => {
-                let newNotes = oldState.notes.slice(0);
-                newNotes = newNotes.concat(notes.map((note, index) =>
-                    index === this.pageSize - 1 ?
-                        { note: note, nextKey: lastKey } :
-                        { note: note, nextKey: null }
-                ));
-
-                return { notes: newNotes };
-            });
-        }
     };
 
+    // TODO
     previousPage = () => {
-        if(this.state.currentPage !== 1) {
-            this.setState(currentState => {
-                return {
-                    isLoading: this.isFetchNeeded(this.state.currentPage - 1),
-                    currentPage: currentState.currentPage - 1
-                }
-            })
-        }
     };
 
+    // TODO
     nextPage = async () => {
-        if(this.state.currentPage < this.state.notePageMap.length) {
-            this.setState(currentState => {
-                return {
-                    isLoading: this.isFetchNeeded(this.state.currentPage + 1),
-                    currentPage: currentState.currentPage + 1
-                }
-            })
-        }
     };
 
+    // TODO
     changePageSize = (pageSize) => {
-        this.pageSize = pageSize;
-        let newNotePageMap = [];
-        for(let page = 1; page <= Math.ceil(this.totalNumberOfNotes / this.pageSize); page++)
-            newNotePageMap[page - 1] = {
-                page: page,
-                first: (page - 1) * this.pageSize,
-                last: Math.min(((page - 1) * this.pageSize) + this.pageSize - 1, this.totalNumberOfNotes - 1)
-            };
-
-        this.setState({ notePageMap: newNotePageMap, currentPage: 1 });
-
-        this.fetchNeighbourPages();
     };
 
     fetchNotes = (startKey, pageSize) => {
@@ -183,27 +121,68 @@ export default class Home extends Component {
         return API.get('notes', '/notes' + query, {});
     };
 
-    renderNotesList() {
-        let notePage = [];
-        const pageInfo = this.state.notePageMap[this.state.currentPage - 1];
-        for(let i = pageInfo.first; i <= pageInfo.last; i++)
-            notePage[i - pageInfo.first] = this.state.notes[i].note;
+    updateNoteList = async (startKey, pageSize) => {
+        try {
+            let {notes, lastKey} = await this.fetchNotes(startKey, pageSize);
+            let updatedNotes = this.state.notes.concat(notes.map((note, index) =>
+                index === this.pageSize - 1 ?
+                    {note: note, nextKey: lastKey || null} :
+                    {note: note, nextKey: null}
+            ));
 
-        return notePage.map(
-            note => {
+            this.lastFetchHadNext = !!startKey;
+
+            this.setState({
+                isFetchingNotes: false,
+                notes: updatedNotes
+            })
+        } catch(err) {
+            console.log(LOAD_ERR_MESSAGE);
+            this.setState({ isFetchingNotes: false });
+        }
+    };
+
+    scrollNoteList = () => {
+        return this.state.notes.map(
+            noteObj => {
+                const note = noteObj.note;
+                const titleIndex = Math.min(note.content.search('\n'), MAX_TITLE_LENGTH);
+
+                return (
+                    <LinkContainer
+                        key={note.noteId}
+                        to={`/notes/${note.noteId}`}>
+                        <ListGroupItem className='scroll-note-thumbnail note-thumbnail'>
+                            <NoteThumbnail
+                                scrollThumbnail={true}
+                                title={note.content.substr(0, titleIndex !== -1 ? titleIndex : note.content.length)}
+                                date={new Date(note.createdAt).toLocaleString()}
+                                attachment={note.attachment !== null}
+                            />
+                        </ListGroupItem>
+                    </LinkContainer>);
+            }
+        );
+    };
+
+    pagedNoteList = () => {
+        return this.state.notes.map(
+            noteObj => {
+                const note = noteObj.note;
                 const lnBreak = note.content.search('\n');
 
                 return (
                     <LinkContainer
                         key={note.noteId}
                         to={`/notes/${note.noteId}`}>
-                        <ListGroupItem className='note-thumbnail'>
+                        <Button className='paged-note-thumbnail note-thumbnail'>
                             <NoteThumbnail
+                                scrollThumbnail={false}
                                 title={note.content.substr(0, lnBreak !== -1 ? lnBreak : note.content.length)}
                                 date={new Date(note.createdAt).toLocaleString()}
                                 attachment={note.attachment !== null}
                             />
-                        </ListGroupItem>
+                        </Button>
                     </LinkContainer>);
             }
         );
@@ -219,7 +198,7 @@ export default class Home extends Component {
         );
     };
 
-    renderNotes() {
+    renderNotes = () => {
         return (
             <div className='notes'>
                 <PageHeader>Your Notes</PageHeader>
@@ -233,17 +212,34 @@ export default class Home extends Component {
                         </h4>
                     </ListGroupItem>
                 </LinkContainer>
-                <ListGroup className='note-list scrollable-ver' ref={this.noteListRef}>
-                    {!this.state.isLoading && this.renderNotesList()}
-                </ListGroup>
-                {!this.state.isLoading && <PageTracker
-                    currentPage={this.state.currentPage}
-                    numberOfPages={this.state.notePageMap.length}
-                    previousPage={this.previousPage}
-                    nextPage={this.nextPage}
-                    changePageSize={this.changePageSize}
-                />}
-                {this.state.isLoading && <LoadingSpinner color='primary-dark'/>}
+                { this.state.infiniteViewMode ?
+                    <InfiniteScroll
+                        reference={this.noteListRef}
+                        itemList={this.scrollNoteList()}
+                        classNames={['note-list']}
+                        endOfScroll={() => {
+                            if(this.lastFetchHadNext) {
+                                const nextStartKey = this.state.notes[this.state.notes.length - 1].nextKey;
+                                if(nextStartKey) {
+                                    this.setState({ isFetchingNotes: true });
+                                    this.updateNoteList(nextStartKey, this.pageSize);
+                                }
+                            }
+                        }}
+                    /> :
+                    <ItemPage items={ this.pagedNoteList() }/> }
+
+                { !this.state.isLoading && !this.state.isFetchingNotes &&
+                <Button className='float-right' onClick={() => this.setState({infiniteViewMode: !this.state.infiniteViewMode})}>
+                    { this.state.infiniteViewMode ?
+                        'View all in grid mode' :
+                        'Infinite scroll mode' }
+                </Button> }
+
+                { this.state.isFetchingNotes && this.state.infiniteViewMode
+                && <LoadingSpinner color='primary-dark' size='small'/> }
+
+                { this.state.isLoading && <LoadingSpinner color='primary-dark'/> }
             </div>
         );
     }
@@ -251,7 +247,7 @@ export default class Home extends Component {
     render() {
         return (
             <div className='Home'>
-                {this.props.isAuthenticated ? this.renderNotes() : Home.renderLander()}
+                { this.props.isAuthenticated ? this.renderNotes() : Home.renderLander() }
             </div>
         );
     }
