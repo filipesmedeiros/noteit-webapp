@@ -21,7 +21,7 @@ const NOTES = 'notes';
 const IS_INFINITE = 'isInfinite';
 const PAGE_SIZE = 'pageSize';
 
-const MAX_TITLE_LENGTH = 20;
+const MAX_TITLE_LENGTH = 10;
 
 export default class Home extends Component {
 
@@ -39,7 +39,8 @@ export default class Home extends Component {
             isFetchingNotes: false,
             notes: localStorage.getItem(NOTES) || [],
             infiniteViewMode: localStorage.getItem(IS_INFINITE) || true,
-            currentPage: 1
+            currentPage: 1,
+            counter: 0
         };
     }
 
@@ -85,7 +86,8 @@ export default class Home extends Component {
             this.state.isLoading !== nextState.isLoading ||
             this.state.isFetchingNotes !== nextState.isFetchingNotes ||
             this.state.notes !== nextState.notes ||
-            this.state.infiniteViewMode !== nextState.infiniteViewMode;
+            this.state.infiniteViewMode !== nextState.infiniteViewMode ||
+            this.state.counter !== nextState.counter;
     }
 
     // TODO
@@ -212,6 +214,7 @@ export default class Home extends Component {
                         </h4>
                     </ListGroupItem>
                 </LinkContainer>
+
                 { this.state.infiniteViewMode ?
                     <InfiniteScroll
                         reference={this.noteListRef}
@@ -230,7 +233,7 @@ export default class Home extends Component {
                     <ItemPage items={ this.pagedNoteList() }/> }
 
                 { !this.state.isLoading && !this.state.isFetchingNotes &&
-                <Button className='float-right' onClick={() => this.setState({infiniteViewMode: !this.state.infiniteViewMode})}>
+                <Button className='float-right' onClick={() => this.setState({ infiniteViewMode: !this.state.infiniteViewMode })}>
                     { this.state.infiniteViewMode ?
                         'View all in grid mode' :
                         'Infinite scroll mode' }
@@ -239,10 +242,10 @@ export default class Home extends Component {
                 { this.state.isFetchingNotes && this.state.infiniteViewMode
                 && <LoadingSpinner color='primary-dark' size='small'/> }
 
-                { this.state.isLoading && <LoadingSpinner color='primary-dark'/> }
+                { this.state.isLoading && <LoadingSpinner color='primary-dark' size='medium' /> }
             </div>
         );
-    }
+    };
 
     render() {
         return (

@@ -29,6 +29,6 @@ let pagedThumbnail = (props) => {
             </div> }
         </>
     );
-}
+};
 
 export default (props) => props.scrollThumbnail ? scrollThumbnail(props) : pagedThumbnail(props);
