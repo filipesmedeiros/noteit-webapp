@@ -32,13 +32,17 @@ svg.primary, path.primary
 
 .scroll-note-thumbnail
   height: 7.5rem
+  padding-right: 50px
 
-.scroll-note-thumbnail div
+.scroll-note-thumbnail>div
   height: 100%
 
 .scroll-note-thumbnail h4
   margin-top: 0
   margin-bottom: 3px
+
+.scroll-note-thumbnail .note-icons
+  width: 15%
 
 @media screen and (max-width: 500px)
   .scroll-note-thumbnail h4
@@ -49,8 +53,12 @@ svg.primary, path.primary
     font-weight: 400
     font-size: 1rem
 
-.scroll-note-thumbnail .note-icons
-    width: 200px
+  .scroll-note-thumbnail .note-icons
+    width: 15%
+
+  /* TODO tight on mobile */
+  .scroll-note-thumbnail .note-icons .paperclip
+    margin-right: 5px
 
 /* ===
 

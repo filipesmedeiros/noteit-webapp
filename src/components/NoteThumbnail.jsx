@@ -5,16 +5,18 @@ import './NoteThumbnail.sass'
 
 
 let scrollThumbnail = (props) =>
-    <div>
+    <>
         <div className='float-left center-content-vertically'>
             <h4 className='w-fit'>{props.title}</h4>
             <p>Created on {props.date}</p>
         </div>
         <div className='float-right center-content-vertically note-icons'>
-            {props.attachment && <PaperclipIcon classes='float-left' color='primary' size='25px'/>}
-            <ShareIcon classes='float-right'color='primary' size='25px'/>
+            <div className='justify-between-horizontally'>
+                <ShareIcon classes='float-right ml-50' color='primary' size='25px'/>
+                {props.attachment && <PaperclipIcon classes='float-left paperclip' color='primary' size='25px'/>}
+            </div>
         </div>
-    </div>;
+    </>;
 
 let pagedThumbnail = (props) => {
     return (
