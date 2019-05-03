@@ -8,8 +8,10 @@ import SignUp from './containers/SignUp';
 import NewNote from './containers/NewNote';
 import Note from './containers/Note';
 import Settings from './containers/Settings';
+import Friends from './containers/Friends';
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 import UnauthenticatedRoute from './components/UnauthenticatedRoute';
+
 
 export default ({childProps}) =>
 
@@ -24,6 +26,7 @@ export default ({childProps}) =>
         <AuthenticatedRoute path="/notes/:id" exact component={Note} props={childProps} />
 
         <AuthenticatedRoute path="/settings" exact component={Settings} props={childProps} />
+        <AuthenticatedRoute path="/friends" exact component={Friends} props={childProps} />
 
         { /* Finally, catch all unmatched routes */ }
         <Route component={NotFound}/>

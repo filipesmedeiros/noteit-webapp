@@ -6,19 +6,17 @@ import Routes from './Routes';
 import Background from './components/Background';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Auth } from 'aws-amplify';
-import BellIcon from 'react-bell-icon';
-import { Button, OverlayTrigger, ButtonToolbar, Popover  } from 'react-bootstrap'
+import Notifications from './components/Notifications';
+import Button from 'react-bootstrap/es/Button'
 
-
+//TODO arranjar o popover
 class App extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             isAuthenticated: false,
-            isAuthenticating: true,
-            newNotification: false,
-            unRead: []
+            isAuthenticating: true
         };
     }
 
@@ -64,25 +62,12 @@ class App extends Component {
 
         return (
             <>
-                <Button onClick={() => this.receiveNotification()}> Receber notificação</Button>
                 <Background/>
                 {!this.state.isAuthenticating &&
                 <div className="App container">
                     <Navbar fluid collapseOnSelect>
                         <Navbar.Header>
-                        {this.state.isAuthenticated &&
-                            <Navbar.Brand>
-                                <ButtonToolbar>
-                                    <OverlayTrigger trigger="click" key="bottom" placement="bottom"  overlay={
-                                        <Popover id={'popover-positioned-bottom'} title={'Notifications'} >
-                                        Teste
-                                        </Popover>
-                                    }>
-                                    <BellIcon onClick={() =>this.readAll()} color="#FFAE00" active={this.state.unRead.length>0} animate={this.state.newNotification}/>
-                                    </OverlayTrigger>
-                                </ButtonToolbar>
-                                <div>{this.state.unRead.length}</div>
-                            </Navbar.Brand>}
+                        {this.state.isAuthenticated && <Notifications/>}
                             <Navbar.Brand>
                                 <Link to="/">NoteIt</Link>
                             </Navbar.Brand>
@@ -92,6 +77,9 @@ class App extends Component {
                             <Nav pullRight>
                                 {this.state.isAuthenticated
                                     ? <>
+                                        <LinkContainer to="/friends">
+                                            <NavItem>Share with friends</NavItem>
+                                        </LinkContainer>
                                         <LinkContainer to="/settings">
                                             <NavItem>Settings</NavItem>
                                         </LinkContainer>

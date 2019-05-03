@@ -5,6 +5,7 @@ import BillingForm from "../components/BillingForm";
 import config from "../config";
 import "./Settings.css";
 
+
 export default class Settings extends Component {
     constructor(props) {
         super(props);
@@ -45,7 +46,7 @@ export default class Settings extends Component {
     render() {
         return (
             <div className="Settings">
-                <StripeProvider apiKey={config.STRIPE_KEY}>
+              <StripeProvider apiKey={config.STRIPE_KEY}>
                     <Elements>
                         <BillingForm
                             loading={this.state.isLoading}
