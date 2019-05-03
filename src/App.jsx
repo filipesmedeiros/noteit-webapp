@@ -7,7 +7,8 @@ import Background from './components/Background';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Auth } from 'aws-amplify';
 import BellIcon from 'react-bell-icon';
-import { Button } from 'react-bootstrap'
+import { Button, OverlayTrigger, ButtonToolbar, Popover  } from 'react-bootstrap'
+
 
 class App extends Component {
     constructor(props) {
@@ -71,8 +72,16 @@ class App extends Component {
                         <Navbar.Header>
                         {this.state.isAuthenticated &&
                             <Navbar.Brand>
-                                <BellIcon onClick={() =>this.readAll()} width='70' color="#FFAE00" active={this.state.unRead.length>0} animate={this.state.newNotification}/>
-                                 <div>{this.state.unRead.length}</div>
+                                <ButtonToolbar>
+                                    <OverlayTrigger trigger="click" key="bottom" placement="bottom"  overlay={
+                                        <Popover id={'popover-positioned-bottom'} title={'Notifications'} >
+                                        Teste
+                                        </Popover>
+                                    }>
+                                    <BellIcon onClick={() =>this.readAll()} color="#FFAE00" active={this.state.unRead.length>0} animate={this.state.newNotification}/>
+                                    </OverlayTrigger>
+                                </ButtonToolbar>
+                                <div>{this.state.unRead.length}</div>
                             </Navbar.Brand>}
                             <Navbar.Brand>
                                 <Link to="/">NoteIt</Link>
