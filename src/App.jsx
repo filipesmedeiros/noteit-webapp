@@ -6,6 +6,7 @@ import Routes from './Routes';
 import Background from './components/Background';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Auth } from 'aws-amplify';
+import BellIcon from 'react-bell-icon'
 
 class App extends Component {
     constructor(props) {
@@ -54,6 +55,9 @@ class App extends Component {
                 <div className="App container">
                     <Navbar fluid collapseOnSelect>
                         <Navbar.Header>
+                            <Navbar.Brand>
+                                <BellIcon width='70' active='true' color='#FFAE00' animate={true}></BellIcon>
+                            </Navbar.Brand>
                             <Navbar.Brand>
                                 <Link to="/">NoteIt</Link>
                             </Navbar.Brand>
