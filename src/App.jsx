@@ -7,9 +7,8 @@ import Background from './components/Background';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Auth } from 'aws-amplify';
 import Notifications from './components/Notifications';
-import Button from 'react-bootstrap/es/Button'
 
-//TODO arranjar o popover
+
 class App extends Component {
     constructor(props) {
         super(props);

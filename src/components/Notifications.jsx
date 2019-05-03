@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, OverlayTrigger, ButtonToolbar, Popover  } from 'react-bootstrap';
 import BellIcon from 'react-bell-icon';
 import Alert from 'react-bootstrap/es/Alert'
+import './Notifications.sass'
 
 
 export default class Notifications extends Component{
@@ -30,16 +31,19 @@ export default class Notifications extends Component{
 
     deleteNotification = index => {
         let clone = this.state.unRead.slice(0)
-        clone[index] = null
+        clone.splice(index, 1)
         this.setState({unRead : clone})
     }
 
     notificationList = () => {
 
-        let alertArray = this.state.unRead.map(
+        if(this.state.unRead.length === 0)
+            return (
+                <h4>Ninguém quer saber de ti</h4>
+            )
 
+        let alertArray = this.state.unRead.map(
             (notification, index) => {
-                if(notification)
                     return (
                         <Button key={index} onClick={()=> this.deleteNotification(index)}>
                             <Alert  variant='light'>
@@ -52,25 +56,26 @@ export default class Notifications extends Component{
             }
         ); 
 
-        return alertArray
+
+        return alertArray;
     }
 
     render() {
         
         return (
             <>
-                <Button onClick={() => this.receiveNotification()}> Receber notificação</Button>
+                
                 <div className='notifications'>
                     <ButtonToolbar>
                         <OverlayTrigger trigger="click" key="bottom" placement="bottom"  overlay={
-                            <Popover id='popover-positioned-bottom' title='Notifications' >
+                            <Popover  className='notification-popover' id='popover-positioned-bottom' title='Notifications' >
                                {this.notificationList()}
                             </Popover>
                         }>
                             <BellIcon width='30' color="#FFAE00" active={this.state.unRead.length>0} animate={this.state.newNotification}/>
                         </OverlayTrigger>
                     </ButtonToolbar>
-                    <div className='notifications-count'><span><strong>{this.state.unRead.filter(notification => notification !== null).length}</strong></span></div>
+                    <div className='notifications-count'><span><strong>{this.state.unRead.length}</strong></span></div>
                 </div>
             </>
 
