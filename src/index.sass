@@ -1,15 +1,37 @@
-// Global font set
+/* =========== Global font set =========== */
+
 $text-font: 'Montserrat', sans-serif
 $title-font: 'Montserrat', sans-serif
 $code-font: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace
 
-// Global color scheme
+/* ======================================= */
+
+/* ========= Global color scheme ========= */
+
 $primary-color: #FFAE00
 $dark-color: #282828
 $light-color: #FFFFFF
+$light-gray-color: #e2e2e2
 $warning-color: #FF7A00
 $success-color: #1ec814
 $error-color: #c10000
+
+/* ======================================= */
+
+/* ==== Global sizings for icons, etc ==== */
+
+$size-small: 30px
+$size-medium: 1.5 * $size-small
+$size-large: 2.5 * $size-small
+
+$scrollbar-width: 10px
+$scrollbar-width-hover: 100px
+
+$border-radius: 0.6rem
+
+/* ======================================= */
+
+/* ============ General rules ============ */
 
 body
   margin: 0
@@ -33,6 +55,34 @@ input.form-control
 input[type=file]
   width: 100%
 
+button[disabled]
+  cursor: default !important
+
+/* ======================================= */
+
+/* ========== Custom scrollbars ========== */
+
+.scrollable-ver
+  overflow-y: auto
+
+::-webkit-scrollbar
+  width: $scrollbar-width
+
+%right-border-round
+  border-bottom-right-radius: $border-radius
+
+::-webkit-scrollbar-track
+  @extend %right-border-round
+  background: $light-gray-color
+
+::-webkit-scrollbar-thumb
+  @extend %right-border-round
+  background: $dark-color
+
+/* ======================================= */
+
+/* ============= Color rules ============= */
+
 .primary
   color: $primary-color !important
 
@@ -51,6 +101,27 @@ input[type=file]
 .error
   color: $error-color !important
 
+/* ======================================= */
+
+/* ========== Formatting rules =========== */
+  
+.block
+  display: block
+
+.m-auto-hor
+  margin: 0 auto
+
+.w-fit
+  width: -moz-fit-content
+  width: fit-content
+
+.h-100
+  height: 100%
+
+.flex-center
+  display: flex
+  justify-content: center
+
 .float-left
   float: left
 
@@ -61,3 +132,31 @@ input[type=file]
   display: flex
   flex-flow: column
   justify-content: center
+
+.end-content-vertically
+  display: flex
+  flex-flow: column
+  justify-content: flex-end
+
+.dist-content-vertically
+  display: flex
+  flex-flow: column
+  justify-content: space-between
+
+/* ======================================= */
+
+/* ============= Size rules ============== */
+
+.btn.small.square
+  width: $size-small
+  height: $size-small
+
+.btn.medium.square
+  width: $size-medium
+  height: $size-medium
+
+.btn.large.square
+  width: $size-large
+  height: $size-large
+
+/* ======================================= */

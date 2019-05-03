@@ -1,0 +1,53 @@
+@import '../index'
+
+$circle-width-small: $size-small / 10
+$circle-width-medium: $size-medium / 10
+$circle-width-large: $size-large / 10
+
+.loading-spinner
+  border-radius: 50%
+  border-style: solid
+  animation: rotate infinite 1s
+  margin: 0 auto
+
+/* ======== Animations for the spinner ======== */
+
+@keyframes rotate
+  from
+    -webkit-transform: rotate(0deg)
+    -moz-transform: rotate(0deg)
+    -ms-transform: rotate(0deg)
+    -o-transform: rotate(0deg)
+    transform: rotate(0deg)
+  to
+    -webkit-transform: rotate(360deg)
+    -moz-transform: rotate(360deg)
+    -ms-transform: rotate(360deg)
+    -o-transform: rotate(360deg)
+    transform: rotate(360deg)
+
+/* ============================================ */
+
+/* ===== Different sizes for the spinner ====== */
+
+=circle($size, $border-width)
+  width: $size
+  height: $size
+  border-width: $border-width
+
+.loading-spinner.small
+  +circle($size-small, $circle-width-small)
+.loading-spinner.medium
+  +circle($size-medium, $circle-width-medium)
+.loading-spinner.large
+  +circle($size-large, $circle-width-large)
+
+/* ============================================ */
+
+/* === Different color sets for the spinner === */
+
+.loading-spinner.primary-dark
+  border-color: $dark-color
+  border-top-color: $primary-color
+
+/* ============================================ */

@@ -1,31 +1,61 @@
 @import '../index'
 @import '../containers/Home'
 
-div.note-thumbnail
+/* Generic
+
+.note-thumbnail
   width: 100%
-  list-style: none
   background: $light-color
-  float: left
-  height: 7.5rem
-  padding: 0 2rem
-  border: 1px solid #DDD
-  border-bottom: none
 
-div.note-thumbnail:hover
-  background: $dark-color
-  cursor: pointer
-  color: $primary-color
+.note-thumbnail:hover
+  background: $dark-color !important
+  cursor: pointer !important
+  color: $primary-color !important
 
-.note-thumbnail div
-  height: 100%
+.note-thumbnail h4
+  font-weight: 600
 
 .note-thumbnail div p
   margin-bottom: 0
 
-.note-thumbnail h4
+/* ===
+
+/* For scroll mode thumbnails
+
+.scroll-note-thumbnail
+  height: 7.5rem
+
+.scroll-note-thumbnail div
+  height: 100%
+
+.scroll-note-thumbnail h4
   margin-top: 0
   margin-bottom: 3px
-  font-weight: 600
 
-a:last-child .note-thumbnail
-  border-bottom: 1px solid #DDD
+@media screen and (max-width: 500px)
+  .scroll-note-thumbnail h4
+    font-weight: 500
+    font-size: 1.7rem
+
+  .scroll-note-thumbnail p
+    font-weight: 400
+    font-size: 1rem
+
+/* ===
+
+/* For paged mode thumbnails
+
+.paged-note-thumbnail
+  width: 100%
+  height: 100%
+  border: 1px solid $light-gray-color
+  border-radius: $border-radius
+  padding: 4%
+
+.paged-note-thumbnail div
+  height: 35%
+
+.paged-note-thumbnail .name-and-date
+  height: 65%
+
+/* ===

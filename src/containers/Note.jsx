@@ -6,7 +6,7 @@ import { s3Remove, s3Upload } from '../libs/awsLib';
 import config from '../config';
 import './Note.css';
 
-export default class Notes extends Component {
+export default class Note extends Component {
     constructor(props) {
         super(props);
 
@@ -123,7 +123,6 @@ export default class Notes extends Component {
         return API.del('notes', `/notes/${this.props.match.params.id}`, {});
     };
 
-    // TODO find a way to delete attachment when note is deleted or attachment changed
     // TODO make a cooler confirmation prompt
     handleDelete = async event => {
         event.preventDefault();
@@ -173,7 +172,7 @@ export default class Notes extends Component {
                                 rel='noopener noreferrer'
                                 href={this.state.attachmentURL}
                             >
-                                {Notes.formatFilename(this.state.note.attachment)}
+                                {Note.formatFilename(this.state.note.attachment)}
                             </a>
                         </FormControl.Static>
                     </FormGroup>}

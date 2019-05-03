@@ -1,29 +1,31 @@
 @import '../index'
 
-$note-list-radius: 0.6rem
-
 .Home
   display: flex
   flex-direction: column
   justify-content: center
 
 .Home .lander
-  margin-top: 10rem
-  padding: 80px 0
+  padding: 20vh 0
   text-align: center
 
 .Home .lander h1
   font-weight: 600
-  font-size: 20rem
+  font-size: 15vh
 
 .Home .lander p
   color: $dark-color
-  font-size: 1.8rem
+  font-size: 1.8vh
+
+.note-list
+  max-height: 42.5vh
 
 .create-note-row
   margin-bottom: 2rem
   background: $dark-color
   border: none
+  border-top-left-radius: $border-radius
+  border-top-right-radius: $border-radius
 
 .create-note-row:hover
   background: $dark-color !important
@@ -34,16 +36,34 @@ $note-list-radius: 0.6rem
 .create-note-row h4
   color: $primary-color
 
-.list-group-item:first-child
-  border-top-left-radius: $note-list-radius
-  border-top-right-radius: $note-list-radius
+.note-list .list-group-item
+  margin-bottom: 4px
+  margin-top: 4px
 
-a:last-child .note-thumbnail
-  border-bottom-left-radius: $note-list-radius
-  border-bottom-right-radius: $note-list-radius
+.list-group-item
+  border-color: $light-gray-color
+
+.list-group .list-group-item:first-child
+  border-top-left-radius: 0 !important
+  border-top-right-radius: 0 !important
+  margin-top: 0
+
+.list-group .list-group-item:last-child
+  border-bottom-left-radius: $border-radius
+  border-bottom-right-radius: $border-radius
+  margin-bottom: 0
+
+.overflowing-ver .list-group-item
+  border-right: none
+
+.overflowing-ver .list-group-item:last-child
+  border-bottom-right-radius: 0
 
 a h4, a p
   color: $dark-color
 
 a:hover h4, a:hover p
   color: unset
+
+Link
+  height: 30px
