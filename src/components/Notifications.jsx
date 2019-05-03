@@ -72,7 +72,7 @@ export default class Notifications extends Component{
                                {this.notificationList()}
                             </Popover>
                         }>
-                            <BellIcon width='30' color="#FFAE00" active={this.state.unRead.length>0} animate={this.state.newNotification}/>
+                            <BellIcon className='primary' width='30' active={this.state.unRead.length>0} animate={this.state.newNotification}/>
                         </OverlayTrigger>
                     </ButtonToolbar>
                     <div className='notifications-count'><span><strong>{this.state.unRead.length}</strong></span></div>
