@@ -6,7 +6,8 @@ import Routes from './Routes';
 import Background from './components/Background';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Auth } from 'aws-amplify';
-import BellIcon from 'react-bell-icon'
+import BellIcon from 'react-bell-icon';
+import { Button } from 'react-bootstrap'
 
 class App extends Component {
     constructor(props) {
@@ -14,7 +15,9 @@ class App extends Component {
 
         this.state = {
             isAuthenticated: false,
-            isAuthenticating: true
+            isAuthenticating: true,
+            newNotification: false,
+            unRead: []
         };
     }
 
@@ -42,6 +45,16 @@ class App extends Component {
         this.props.history.push('/login');
     };
 
+    receiveNotification = () => {
+        this.setState({newNotification : true})
+        setTimeout(() => this.setState({newNotification : false}), 2000)
+        this.state.unRead.push(1)
+    } 
+
+    readAll = () => {
+        this.setState({unRead : []})
+    }
+
     render() {
         const childProps = {
             isAuthenticated: this.state.isAuthenticated,
@@ -50,14 +63,17 @@ class App extends Component {
 
         return (
             <>
+                <Button onClick={() => this.receiveNotification()}> Receber notificação</Button>
                 <Background/>
                 {!this.state.isAuthenticating &&
                 <div className="App container">
                     <Navbar fluid collapseOnSelect>
                         <Navbar.Header>
+                        {this.state.isAuthenticated &&
                             <Navbar.Brand>
-                                <BellIcon width='70' active='true' color='#FFAE00' animate={true}></BellIcon>
-                            </Navbar.Brand>
+                                <BellIcon onClick={() =>this.readAll()} width='70' color="#FFAE00" active={this.state.unRead.length>0} animate={this.state.newNotification}/>
+                                 <div>{this.state.unRead.length}</div>
+                            </Navbar.Brand>}
                             <Navbar.Brand>
                                 <Link to="/">NoteIt</Link>
                             </Navbar.Brand>
